@@ -37,28 +37,66 @@ namespace WindowsFormsApp6
         private void label1_Click_1(object sender, EventArgs e)
         {
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            label1.Text =  textBox1.Text; 
+            float curent = CheckCurrency(comboBox1.Text);
+            float needed = CheckCurrency(comboBox2.Text);
+            double tryPars;
+            if (CheckErrorecurrency(curent, needed) && Double.TryParse(textBox1.Text,out tryPars))
+            {
+                float coefficient = CalculateCoefficient(needed, curent);
+                textBox2.Text = Convert.ToString(Math.Round((float)tryPars * coefficient, 2));
+            }
+            if(!Double.TryParse(textBox1.Text, out tryPars))
+            {
+                MessageBox.Show("Произошла ошибка ввода суми");
+            }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (checkBox2.Checked == true)
-            {
-                checkBox2.Checked = false;
-            }
-            label2.Text = "Грн";
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked == true)
-            {
-                checkBox1.Checked = false;
-            }
-            label2.Text = "$";
+
         }
+        class ratio
+        {
+            public float dolar = (float)1.2;
+            public float grn = 30;
+            public float eu = 1;
+        }
+        public float CheckCurrency(string currency)
+        {
+            ratio number = new ratio();
+            if(currency == "$")
+            {
+                return number.dolar;
+            }
+            if (currency == "Грн.")
+            {
+                return number.grn;
+            }
+            if (currency == "Євро.")
+            {
+                return number.eu;
+            }
+            return (float)-1.0;
+        }
+        public float CalculateCoefficient(float division, float divider)
+        {
+            return (float)division / (float)divider;
+        }
+        public bool CheckErrorecurrency(float currency1, float currency2)
+        {
+            if(currency1 < 0 || currency2 < 0)
+            {
+                MessageBox.Show("Произошла ошибка ввода валют");
+                return false;
+            }
+            return true;
+        }
+
     }
 }
